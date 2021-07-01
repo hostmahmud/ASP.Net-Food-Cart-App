@@ -1,0 +1,148 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="admin.master.cs" Inherits="OnlineFoodOrdering.admin.admin" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Askbootstrap" />
+    <meta name="author" content="Askbootstrap" />
+    <title>Dashboard</title>
+
+    <link rel="icon" type="image/png" href="img/favicon.png">
+
+    <link href="vendor/icons/feather.css" rel="stylesheet" type="text/css">
+
+    <link href="vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/styles.css" rel="stylesheet" />
+
+    <link href="vendor/dataTables/dataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="sb-nav-fixed">
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="false"></asp:ScriptManager>
+        <nav class="sb-topnav navbar navbar-expand navbar-light bg-white shadow-sm">
+            <a class="navbar-brand" href="index.html">
+                <img alt="logo" src="/img/isdb.png" width="35"><span> IsDB BISEW</span></a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+
+            <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <div class="input-group-append">
+                    </div>
+                </div>
+            </div>
+
+            <ul class="navbar-nav ml-auto ml-md-0">
+
+                <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown">
+                    <a class="nav-link dropdown-toggle pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       <%: Session["fname"] %> <%: Session["lname"]%> &nbsp; <i class="fa fa-user-circle fa-2x"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right shadow-sm">
+                        <div class="p-3 d-flex align-items-center">
+                            <div class="dropdown-list-image mr-3">
+                                <i class="rounded-circle fa fa-user-circle fa-2x"></i>
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold">
+                                <div class="text-truncate"><%: Session["fname"] %> <%: Session["lname"] %></div>
+                                <div class="small text-gray-500"><%: Session["role"] %></div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <asp:LinkButton runat="server" ID="btnLogout" OnClick="btnLogout_Click" class="dropdown-item">
+                        <i class="feather-log-out"></i>Logout
+                        </asp:LinkButton>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <a class="nav-link" href="Default.aspx">
+                                <div class="sb-nav-link-icon"><i class="feather-home"></i></div>
+                                Dashboard
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRestaurant" aria-expanded="false" aria-controls="collapseLayoutss">
+                                <div class="sb-nav-link-icon"><i class="feather-layout"></i></div>
+                                Restaurant
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseRestaurant" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="addRestaurant.aspx"><i class="feather-plus-circle"></i>&nbsp; Add Restaurant</a>
+                                    <a class="nav-link" href="AddMenu.aspx"><i class="feather-plus-circle"></i>&nbsp; Add Menu </a>
+                                    <a class="nav-link" href="allRestaurants.aspx"><i class="feather-activity"></i>&nbsp; View All </a>
+                                </nav>
+                            </div>
+                            <a class="nav-link" href="Orders.aspx">
+                                <div class="sb-nav-link-icon"><i class="feather-shopping-cart"></i></div>
+                                Orders
+                            </a>
+                            <a class="nav-link" href="Reports.aspx">
+                                <div class="sb-nav-link-icon"><i class="fa fa-dochub"></i></div>
+                                Reports
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        <span runat="server" id="loggedInAs"></span>
+                        <%: Session["fname"] %>
+                    </div>
+                </nav>
+            </div>
+
+            <div>
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+
+            <footer class="py-4 bg-light my-4">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright © Your Website 2020</div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </form>
+    <script src="vendor/jquery/jquery.min.js" type="text/javascript"></script>
+
+    <script src="vendor/fontawesome/js/all.min.js" type="text/javascript"></script>
+
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+
+    <script src="js/scripts.js" type="text/javascript"></script>
+    <script src="js/Chart.min.js"></script>
+
+    <script src="assets/admin/chart-area-demo.js" type="text/javascript"></script>
+    <script src="assets/admin/chart-bar-demo.js" type="text/javascript"></script>
+    <script src="assets/admin/chart-pie-demo.js" type="text/javascript"></script>
+
+    <script src="vendor/dataTables/dataTables/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="vendor/dataTables/dataTables/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
+    <script src="assets/admin/datatables-demo.js" type="text/javascript"></script>
+    <script src="js/rocket-loader.min.js" data-cf-settings="17670b2998732a919d87a4d3-|49" defer=""></script>
+
+    <script defer src="js/beacon.min.js" data-cf-beacon='{"rayId":"65651d6f688e0ac0","version":"2021.5.2","r":1,"token":"dd471ab1978346bbb991feaa79e6ce5c","si":10}'></script>
+
+    <asp:ContentPlaceHolder ID="footer" runat="server">
+    </asp:ContentPlaceHolder>
+
+</body>
+</html>

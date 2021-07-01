@@ -1,0 +1,142 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="OnlineFoodOrdering.SiteMaster" %>
+
+<%--Register custom control--%>
+<%@ Register Src="~/CustomControls/Footer.ascx" TagName="footer" TagPrefix="pFooter" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <title>Online Food Ordering Website</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link href="vendor/icofont/icofont.min.css" rel="stylesheet" />
+    <link href="vendor/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="vendor/owl-carousel/owl.carousel.css" rel="stylesheet" />
+    <link href="vendor/owl-carousel/owl.theme.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+<body>
+    <form runat="server">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light osahan-nav shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="Default.aspx">
+                    <img alt="logo" src="/img/isdb.png" width="35"><span> IsDB BISEW</span></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="Default.aspx">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="nav-osahan-pic rounded-pill fa fa-user fa-2x"></i>
+                                <% if (Session["fname"] != null)
+                                    { %>
+                                <span><%= Session["fname"].ToString() %></span>
+                                <% }
+                                else
+                                { %>
+                            My Account
+                                <% } %>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow-sm border-0">
+                                <a class="dropdown-item" href="MyOrders.aspx"><i class="icofont-food-cart"></i> My Orders</a>
+                                <% if (Session["email"] != null)
+                                { %>
+                                <asp:LinkButton runat="server" ID="btnLogOut" CssClass="dropdown-item" OnClick="btnLogOut_Click"><i class="icofont-logout"></i> Logout</asp:LinkButton>
+                                <% } %>
+                                <% if (Session["email"] == null)
+                                { %>
+                                <a class="dropdown-item" href="Login.aspx"><i class="icofont-login"></i>Login</a>
+                                <% } %>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown dropdown-cart">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-shopping-basket"></i>Cart
+                            <span runat="server" id="HeaderCartCountNumber" class="badge badge-success">0</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-cart-top p-0 dropdown-menu-right shadow-sm border-0">
+                                <div class="dropdown-cart-top-body border-top p-4">
+                                    <h5 class="mb-4">YOUR CART ITEMS</h5>
+                                    <asp:GridView runat="server" ID="GVCartMaster" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical" Width="100%" HorizontalAlign="Center" AutoGenerateColumns="false" OnRowCommand="GVCartMaster_RowCommand">
+
+                                        <Columns>
+
+                                            <asp:TemplateField ShowHeader="false" ItemStyle-CssClass="border-0" HeaderStyle-CssClass="border-0">
+                                                <ItemTemplate>
+                                                    <i class="icofont-ui-press text-success food-item"></i> <span><%# Eval("Title") %></span> x <%# Eval("Quantity") %>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField ShowHeader="false" ItemStyle-CssClass="border-0" HeaderStyle-CssClass="border-0">
+                                                <ItemTemplate>
+                                                    <span><%# string.Format("{0:C}", Convert.ToDecimal(Eval("ItemTotal"))) %></span>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField ShowHeader="false" ItemStyle-CssClass="border-0" HeaderStyle-CssClass="border-0">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-danger btn-sm py-0 small" ID="BtnRemoveFromCartMaster" CommandArgument='<%# Eval("Id") %>' CommandName="RemoveCartItemMaster">
+                                                <i class="fa fa-trash-alt"></i>
+                                                    </asp:LinkButton>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                        </Columns>
+                                    </asp:GridView>
+                                    <%--<asp:ListView ID="LVCartItemsMaster" runat="server" DataSourceID="dsCartItems">
+                                        <ItemTemplate>
+                                            <p class="mb-2"><i class="icofont-ui-press text-danger food-item"></i><%# Eval("Title") %> <span class="float-right text-secondary">Tk. <%# string.Format("{0:0}", Convert.ToDecimal(Eval("Price"))) %></span></p>
+                                        </ItemTemplate>
+                                        <EmptyDataTemplate>
+                                            <p class="alert alert-info">
+                                                <i class="fa fa-info-circle"></i>Your cart is empty...
+                                            </p>
+                                        </EmptyDataTemplate>
+                                    </asp:ListView>--%>
+                                    <%--<asp:ObjectDataSource ID="dsCartItems" runat="server" SelectMethod="GetCartItems" TypeName="OnlineFoodOrdering.restaurant"></asp:ObjectDataSource>--%>
+                                </div>
+                                <div class="dropdown-cart-top-footer border-top p-4">
+                                    <p class="mb-0 font-weight-bold text-secondary">Sub Total <span class="float-right text-dark">Tk. <span runat="server" id="CartSubtotalMaster"></span></span></p>
+                                    <small class="text-info">Extra charges may apply</small>
+                                </div>
+                                <div class="dropdown-cart-top-footer border-top p-2">
+                                    <a class="btn btn-success btn-block btn-lg" href="Checkout.aspx">Checkout</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+        </asp:ContentPlaceHolder>
+
+        <pFooter:footer ID="footer1" runat="server" />
+    </form>
+    <script src="vendor/jquery/jquery-3.3.1.slim.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/select2/js/select2.min.js"></script>
+    <script src="vendor/owl-carousel/owl.carousel.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="b793bfe0fc658d4ba7d15504-|49" defer="">
+    </script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"rayId":"65f134df08db6995","version":"2021.5.2","r":1,"token":"dd471ab1978346bbb991feaa79e6ce5c","si":10}'></script>
+    <asp:ContentPlaceHolder ID="footer" runat="server">
+    </asp:ContentPlaceHolder>
+</body>
+</html>
